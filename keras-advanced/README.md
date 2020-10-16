@@ -48,3 +48,16 @@ lambda x, y: (data_augmentation(x, training=True), y))
 - With this option, your data augmentation will happen on CPU, asynchronously, and will be buffered before going into the model.
 
 - If you're training on CPU, this is the better option, since it makes data augmentation asynchronous and non-blocking.
+
+# Configure the dataset for performance
+
+- Let's make sure to use buffered prefetching so we can yield data from disk without having I/O becoming blocking:
+
+# Build a model
+
+- We'll build a small version of the Xception network. We haven't particularly tried to optimize the architecture; if you want to do a systematic search for the best model configuration, consider using Keras Tuner.
+
+- Note that:
+
+  - We start the model with the data_augmentation preprocessor, followed by a Rescaling layer.
+  - We include a Dropout layer before the final classification layer.
