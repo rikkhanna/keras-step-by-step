@@ -89,7 +89,7 @@ def visualizeDataset(train_ds, numImages):
         plt.show()
 
 
-def data_augmentation():
+def dataAugmentation():
     data_augmentation = keras.Sequential([
         layers.experimental.preprocessing.RandomFlip("horizontal"),
         layers.experimental.preprocessing.RandomRotation(0.1),
@@ -102,7 +102,7 @@ def imageDataAugmentation(train_ds, numImages):
     plt.figure(figsize=(10, 10))
     for images, labels in train_ds.take(1):
         for i in range(numImages):
-            augmented_images = data_augmentation()(images)
+            augmented_images = dataAugmentation()(images)
             plt.subplot(5, 5, i+1)
             plt.xticks([])
             plt.yticks([])
@@ -123,10 +123,12 @@ val_ds = validation_ds.prefetch(buffer_size=32)
 
 # using option 2 coz we are training on CPU
 augmented_train_ds = train_ds.map(
-    lambda x, y: (data_augmentation()(x, training=True), y))
+    lambda x, y: (dataAugmentation()(x,), y))
 
 
 # build Model
+
+
 def make_model(input_shape, num_classes):
     inputs = keras.Input(shape=input_shape)
     # Image augmentation block
